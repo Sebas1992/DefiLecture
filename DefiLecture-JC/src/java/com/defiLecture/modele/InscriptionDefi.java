@@ -31,7 +31,7 @@ public class InscriptionDefi {
                 idDefi,
                 valeurMinute,
                 estReussi;
-    private String dateInscription;
+    private String dateInscription, reponse;
 
     public int getIdInscriptionDefi() {
         return idInscriptionDefi;
@@ -79,6 +79,14 @@ public class InscriptionDefi {
 
     public void setDateInscription(String dateInscription) {
         this.dateInscription = dateInscription;
+    }
+
+    public String getReponse() {
+        return reponse;
+    }
+
+    public void setReponse(String reponse) {
+        this.reponse = reponse;
     }
     
     

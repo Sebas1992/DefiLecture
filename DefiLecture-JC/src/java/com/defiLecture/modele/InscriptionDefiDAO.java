@@ -49,27 +49,33 @@ public class InscriptionDefiDAO extends DAO<InscriptionDefi> {
     @Override
     public boolean create(InscriptionDefi x) {
                
-        String req = "INSERT INTO inscription_defi (`ID_COMPTE` ,`ID_DEFI` ,`VALEUR_MINUTE` , `EST_REUSSI`) VALUES "+
+        String reqInsDefi = "INSERT INTO inscription_defi (`ID_COMPTE` ,`ID_DEFI` ,`VALEUR_MINUTE` , `EST_REUSSI`) VALUES "+
 			     "(?,?,?,?)";
-				 		 
+	String reqReponse = "INSERT INTO reponses (`ID_COMPTE`, `ID_DEFI`, `reponse`) "
+                + "VALUES (?, ?, ?)";	 		 
 
         PreparedStatement paramStm = null;
         try 
         {
 
-            paramStm = cnx.prepareStatement(req);
-
-                
+            paramStm = cnx.prepareStatement(reqInsDefi);                
                 
             paramStm.setInt(1, x.getIdCompte());
             paramStm.setInt(2, x.getIdDefi());
             paramStm.setInt(3, x.getValeurMinute());
             paramStm.setInt(4, x.getEstReussi());
                 
-
             int n= paramStm.executeUpdate();
-                
-            if (n>0)
+            
+            paramStm = cnx.prepareStatement(reqReponse);
+            
+            paramStm.setInt(1, x.getIdCompte());
+            paramStm.setInt(2, x.getIdDefi());
+            paramStm.setString(3, x.getReponse());
+            
+            int m = paramStm.executeUpdate();
+            
+            if (n>0 && m>0)
             {
                 paramStm.close();
                 return true;

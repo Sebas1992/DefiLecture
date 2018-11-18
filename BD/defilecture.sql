@@ -161,6 +161,18 @@ CREATE TABLE `lecture` (
   `EST_OBLIGATOIRE` int(2) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table 'reponses'
+--
+
+DROP TABLE IF EXISTS `reponses`;
+CREATE TABLE `reponses`(
+	`ID_COMPTE` int(10) NOT NULL, 
+	`ID_DEFI` int(10) NOT NULL,
+	`reponse` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Index pour les tables exportées
@@ -281,6 +293,17 @@ ALTER TABLE `inscription_defi`
 --
 ALTER TABLE `lecture`
   ADD CONSTRAINT `LECTURE_FK1` FOREIGN KEY (`ID_COMPTE`) REFERENCES `compte` (`ID_COMPTE`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `reponses`
+--
+
+ALTER TABLE `reponses`
+	ADD CONSTRAINT `REPONSES_FK1` FOREIGN KEY(`ID_COMPTE`)
+	REFERENCES `compte` (`ID_COMPTE`) ON DELETE CASCADE,
+	ADD CONSTRAINT `REPONSES_FK2` FOREIGN KEY(`ID_DEFI`)
+	REFERENCES `defi` (`ID_DEFI`) ON DELETE CASCADE;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

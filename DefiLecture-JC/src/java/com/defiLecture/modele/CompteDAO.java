@@ -394,6 +394,40 @@ public class CompteDAO extends DAO<Compte>{
         return liste;    
     
     }
+    
+    public Compte findById(int id)
+    {
+        String requete = "SELECT * FROM compte WHERE ID_COMPTE = ?";
+
+        try {
+            PreparedStatement stm = cnx.prepareStatement(requete);
+            stm.setInt(1, id);
+            ResultSet resultat = stm.executeQuery();
+            
+            if(resultat.next())
+            {
+                Compte c = new Compte();
+                c.setIdCompte(resultat.getInt("ID_COMPTE"));
+                c.setIdEquipe(resultat.getInt("ID_EQUIPE"));
+                c.setCourriel(resultat.getString("COURRIEL"));
+                c.setPrenom(resultat.getString("PRENOM"));             
+                c.setNom(resultat.getString("NOM"));
+                c.setPseudonyme(resultat.getString("PSEUDONYME"));             
+                c.setAvatar(resultat.getString("AVATAR"));             
+                c.setProgrammeEtude(resultat.getString("PROGRAMME_ETUDE"));
+                c.setMinutesRestantes(resultat.getInt("MINUTES_RESTANTES"));
+                c.setPoint(resultat.getInt("POINT"));
+                c.setRole(resultat.getInt("ROLE"));
+                c.setDevenirCapitaine(resultat.getInt("DEVENIR_CAPITAINE"));
+                resultat.close();
+                stm.close();
+                return c;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CompteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public Compte findByIdentifiantMotPasse(String identifiant, String motPasse){
         

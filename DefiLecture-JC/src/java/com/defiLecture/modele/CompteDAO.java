@@ -245,6 +245,40 @@ public class CompteDAO extends DAO<Compte>{
         }
         return false;
     }
+    
+    public boolean updatePoints(Compte x)
+    {
+        String req = "UPDATE compte SET POINT = ? WHERE ID_COMPTE = ?";
+
+        PreparedStatement paramStm = null;
+        try {
+            paramStm = cnx.prepareStatement(req);
+
+                paramStm.setInt(1, x.getPoint());
+                paramStm.setInt(2, x.getIdCompte());
+
+                int nbLignesAffectees= paramStm.executeUpdate();
+
+                if (nbLignesAffectees>0) {
+                    paramStm.close();
+                    return true;
+                }
+            }                        
+        catch (SQLException exp) {
+            System.out.println(exp.getMessage());
+        }
+        finally {
+                try {
+                    if (paramStm!=null)
+                        paramStm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CompteDAO.class.getName())
+                            .log(Level.SEVERE, null, ex);
+                }
+                
+        }
+        return false;
+    }
 
     @Override
     public boolean delete(Compte x) {

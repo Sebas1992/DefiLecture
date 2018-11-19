@@ -5,6 +5,7 @@ package com.defiLecture.modele;
 public class Reponses {
     private int id_compte, id_defi;
     private String reponse;
+    private boolean correct;
 
 
     public int getId_compte() {
@@ -34,5 +35,13 @@ public class Reponses {
 
     public void setReponse(String reponse) {
         this.reponse = reponse;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 }

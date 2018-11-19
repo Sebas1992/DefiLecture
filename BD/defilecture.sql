@@ -171,7 +171,8 @@ DROP TABLE IF EXISTS `reponses`;
 CREATE TABLE `reponses`(
 	`ID_COMPTE` int(10) NOT NULL, 
 	`ID_DEFI` int(10) NOT NULL,
-	`reponse` varchar(255) NOT NULL
+	`reponse` varchar(255) NOT NULL,
+	`correct` bool NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

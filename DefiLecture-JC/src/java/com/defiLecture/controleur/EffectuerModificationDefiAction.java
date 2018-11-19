@@ -159,18 +159,20 @@ public class EffectuerModificationDefiAction implements Action, RequestAware, Se
         
         for(Reponses rep : listeRep)
         {
-            if(!rep.getReponse().equals(defi.getReponse()))
-            {
-                Compte compte = compteDao.findById(rep.getId_compte());
-                int points = compte.getPoint() - defi.getValeurMinute();
-                compte.setPoint(points);
-                compteDao.updatePoints(compte);
-            }
-            else if(rep.getReponse().equals(defi.getReponse()))
+            if(rep.getReponse().equals(defi.getReponse()) && rep.isCorrect() == false)
             {
                 Compte compte = compteDao.findById(rep.getId_compte());
                 int points = compte.getPoint() + defi.getValeurMinute();
                 compte.setPoint(points);
+                repDao.updateIsCorrect(compte.getIdCompte(), true);
+                compteDao.updatePoints(compte);
+            }
+            else if(!rep.getReponse().equals(defi.getReponse()) && rep.isCorrect() == true)
+            {
+                Compte compte = compteDao.findById(rep.getId_compte());
+                int points = compte.getPoint() - defi.getValeurMinute();
+                compte.setPoint(points);
+                repDao.updateIsCorrect(compte.getIdCompte(), false);
                 compteDao.updatePoints(compte);
             }
         }

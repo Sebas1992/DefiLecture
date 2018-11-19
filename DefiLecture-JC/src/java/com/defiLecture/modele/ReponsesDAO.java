@@ -32,6 +32,7 @@ public class ReponsesDAO {
                 rep.setId_compte(rs.getInt("id_compte"));
                 rep.setId_defi(rs.getInt("id_defi"));
                 rep.setReponse(rs.getString("reponse"));
+                rep.setCorrect(rs.getBoolean("correct"));
                 listeRep.add(rep);
             }
             return listeRep;
@@ -39,5 +40,25 @@ public class ReponsesDAO {
             Logger.getLogger(ReponsesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
          return listeRep;
+    }
+    
+    public boolean updateIsCorrect(int id, boolean value)
+    {
+        String request = "UPDATE reponses SET correct = ? WHERE id_compte = ?";
+        int rowsAffected = 0;
+        
+        Connection cnx;
+        try {
+            cnx = Connexion.getInstance();
+            PreparedStatement stm = cnx.prepareStatement(request);
+            stm.setBoolean(1, value);
+            stm.setInt(2, id);
+            
+            rowsAffected = stm.executeUpdate();
+            return rowsAffected != 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ReponsesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rowsAffected != 0;
     }
 }

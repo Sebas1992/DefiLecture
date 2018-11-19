@@ -51,8 +51,8 @@ public class InscriptionDefiDAO extends DAO<InscriptionDefi> {
                
         String reqInsDefi = "INSERT INTO inscription_defi (`ID_COMPTE` ,`ID_DEFI` ,`VALEUR_MINUTE` , `EST_REUSSI`) VALUES "+
 			     "(?,?,?,?)";
-	String reqReponse = "INSERT INTO reponses (`ID_COMPTE`, `ID_DEFI`, `reponse`) "
-                + "VALUES (?, ?, ?)";	 		 
+	String reqReponse = "INSERT INTO reponses (`ID_COMPTE`, `ID_DEFI`, `reponse`, `correct`) "
+                + "VALUES (?, ?, ?, ?)";	 		 
 
         PreparedStatement paramStm = null;
         try 
@@ -72,6 +72,13 @@ public class InscriptionDefiDAO extends DAO<InscriptionDefi> {
             paramStm.setInt(1, x.getIdCompte());
             paramStm.setInt(2, x.getIdDefi());
             paramStm.setString(3, x.getReponse());
+            if(x.getEstReussi() == 1)
+            {
+                paramStm.setBoolean(4, true);
+            }else
+            {
+                paramStm.setBoolean(4, false);
+            }                         
             
             int m = paramStm.executeUpdate();
             

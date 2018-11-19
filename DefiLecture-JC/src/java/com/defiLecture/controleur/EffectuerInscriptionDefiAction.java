@@ -98,12 +98,13 @@ public class EffectuerInscriptionDefiAction implements Action, RequestAware, Req
                         
                         inscriptionDefi.setValeurMinute(0);
                         inscriptionDefi.setEstReussi(0);
-                        
+                        inscriptionDefi.setReponse(reponseParticipant);
                     }
                     //Si oui, une inscription_defi est crée, avec le résultat 1 (réussie)
                     else{
                         inscriptionDefi.setValeurMinute(defi.getValeurMinute());
                         inscriptionDefi.setEstReussi(1);
+                        inscriptionDefi.setReponse(reponseParticipant);
                         
                         //Mise à jour des points du participant
                         //Conversion du nombre de minutes de la lecture en points pour le Participant : 15mins = 1 point

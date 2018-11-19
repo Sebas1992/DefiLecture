@@ -31,11 +31,15 @@ import jdbc.Config;
 import jdbc.Connexion;
 
 import com.defiLecture.modele.Compte;
+import com.defiLecture.modele.CompteDAO;
 import com.defiLecture.modele.Defi;
 import com.defiLecture.modele.DefiDAO;
+import com.defiLecture.modele.Reponses;
+import com.defiLecture.modele.ReponsesDAO;
 import java.sql.SQLException;
 import com.util.Util;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,6 +118,8 @@ public class EffectuerModificationDefiAction implements Action, RequestAware, Se
                     }
                     if (reponse != defi.getReponse()) {
                         defi.setReponse(Util.toUTF8(reponse));
+                        // On redistribue les points
+                        this.redistribuerPoints(defi);
                     }
 
                     cnx = Connexion.startConnection(Config.DB_USER, Config.DB_PWD, Config.URL, Config.DRIVER);
@@ -137,6 +143,37 @@ public class EffectuerModificationDefiAction implements Action, RequestAware, Se
             return "*.do?tache=afficherPageParticipationDefi";
         }
 
+    }
+    
+    // Redistribue les points aux utilisateurs en fonction de la nouvelle reponse au defi
+    private void redistribuerPoints(Defi defi)
+    {
+        ReponsesDAO repDao = new ReponsesDAO();
+        CompteDAO compteDao = null;
+        try {
+            compteDao = new CompteDAO(Connexion.getInstance());
+        } catch (SQLException ex) {
+            Logger.getLogger(EffectuerModificationDefiAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        List<Reponses> listeRep = repDao.findByDefi(defi);
+        
+        for(Reponses rep : listeRep)
+        {
+            if(!rep.getReponse().equals(defi.getReponse()))
+            {
+                Compte compte = compteDao.findById(rep.getId_compte());
+                int points = compte.getPoint() - defi.getValeurMinute();
+                compte.setPoint(points);
+                compteDao.updatePoints(compte);
+            }
+            else if(rep.getReponse().equals(defi.getReponse()))
+            {
+                Compte compte = compteDao.findById(rep.getId_compte());
+                int points = compte.getPoint() + defi.getValeurMinute();
+                compte.setPoint(points);
+                compteDao.updatePoints(compte);
+            }
+        }
     }
 
     @Override
